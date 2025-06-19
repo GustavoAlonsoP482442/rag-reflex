@@ -1,0 +1,7 @@
+
+reflex==0.7.14
+pinecone
+openai
+PyMuPDF
+python-docx
+langchain

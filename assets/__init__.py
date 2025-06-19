@@ -1,0 +1,4 @@
+
+
+<assets/favicon.ico>
+
