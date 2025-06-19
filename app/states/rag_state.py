@@ -16,7 +16,7 @@ PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
 PINECONE_INDEX_NAME = os.environ.get("PINECONE_INDEX_NAME")
 PINECONE_NAMESPACE = os.environ.get("PINECONE_NAMESPACE", "Pruebas")
 openai_client_instance: Optional[OpenAI] = None
-pinecone_index_instance: Optional[PineconeIndexType] = None
+pinecone_index_instance = None
 initialization_error: Optional[str] = None
 
 try:
