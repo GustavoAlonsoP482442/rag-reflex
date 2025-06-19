@@ -39,6 +39,15 @@ def index() -> rx.Component:
                 ),
                 class_name="mb-6",
             ),
+            # Respuesta generada (ahora debajo del botón "Preguntar")
+            rx.el.textarea(
+                default_value=RAGState.respuesta,
+                key=RAGState.respuesta,
+                read_only=True,
+                class_name="w-full p-4 border border-gray-300 rounded-lg shadow-sm bg-gray-50 min-h-[200px] text-gray-700 whitespace-pre-wrap",
+                placeholder="La respuesta aparecerá aquí...",
+            ),
+            # Subida y procesamiento de documentos (movido aquí)
             rx.el.div(
                 rx.upload(
                     accept=[".pdf", ".txt", ".docx"],
@@ -57,6 +66,7 @@ def index() -> rx.Component:
                     class_name="text-sm text-gray-700 mt-2"
                 )
             ),
+            # Mensaje de error
             rx.cond(
                 RAGState.error_message,
                 rx.el.div(
@@ -64,13 +74,6 @@ def index() -> rx.Component:
                     class_name="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg border border-red-300",
                 ),
                 rx.fragment(),
-            ),
-            rx.el.textarea(
-                default_value=RAGState.respuesta,
-                key=RAGState.respuesta,
-                read_only=True,
-                class_name="w-full p-4 border border-gray-300 rounded-lg shadow-sm bg-gray-50 min-h-[200px] text-gray-700 whitespace-pre-wrap",
-                placeholder="La respuesta aparecerá aquí...",
             ),
             class_name="max-w-2xl mx-auto p-6 sm:p-8 bg-white rounded-xl shadow-xl mt-10 border border-gray-200",
         ),
