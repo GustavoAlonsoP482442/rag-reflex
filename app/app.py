@@ -54,13 +54,9 @@ def index() -> rx.Component:
                     max_files=1,                    
                     class_name="mb-4",
                     show_file_list=True,
+                    on_upload=RAGState.procesar_archivo,
                     id="archivo_usuario"
-                ),              
-                rx.el.button(
-                    "Procesar Documento",
-                    on_click=lambda: RAGState.procesar_archivo(rx.upload_files()),
-                    class_name="mb-6 bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
-                ),
+                ),           
                 rx.el.div(
                     RAGState.mensaje_procesamiento,
                     class_name="text-sm text-gray-700 mt-2"

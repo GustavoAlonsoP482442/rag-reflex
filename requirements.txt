@@ -1,6 +1,6 @@
 
 reflex==0.7.14
-pinecone
+pinecone>=7.0.0
 openai
 PyMuPDF
 python-docx
