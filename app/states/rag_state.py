@@ -1,7 +1,7 @@
 import reflex as rx
 import os
 import time
-from pinecone import Pinecone, Index as PineconeIndexType
+from pinecone import Pinecone
 from openai import OpenAI
 from typing import List, Dict, Optional
 import fitz
