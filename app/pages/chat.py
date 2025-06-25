@@ -48,4 +48,4 @@ def chat() -> rx.Component:
     )
 
 # ✅ Registrar la página
-page = rx.page(chat, route="/chat", title="Asistente RAG")
+#page = rx.page(chat, route="/chat", title="Asistente RAG")

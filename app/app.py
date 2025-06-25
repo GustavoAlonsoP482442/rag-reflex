@@ -55,3 +55,7 @@ app = rx.App(
 )
 
 app.add_page(index, route="/")
+
+from app.pages.chat import chat
+app.add_page(chat, route="/chat")
+
