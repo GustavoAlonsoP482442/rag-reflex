@@ -163,15 +163,13 @@ class RAGState(rx.State):
             self.is_loading = False
             yield
 
-    @rx.event(background=True)
+    @rx.event
     async def procesar_archivo(self, files: list[rx.UploadFile]):
         print("➡️ Evento 'procesar_archivo' disparado.")
 
-        if not files:
-            async with self:
-                self.mensaje_procesamiento = "No se seleccionó ningún archivo."
-                print("⚠️ No se recibió ningún archivo.")
-                yield
+        if not files:            
+            self.mensaje_procesamiento = "No se seleccionó ningún archivo."
+            print("⚠️ No se recibió ningún archivo.")                
             return
 
         file = files[0]
@@ -197,10 +195,8 @@ class RAGState(rx.State):
             import docx
             doc = docx.Document(str(path))
             texto = "\n".join(p.text for p in doc.paragraphs)
-        else:
-            async with self:
-                self.mensaje_procesamiento = "Tipo de archivo no soportado."
-                yield
+        else:            
+            self.mensaje_procesamiento = "Tipo de archivo no soportado."                
             return
 
         from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -223,7 +219,6 @@ class RAGState(rx.State):
                 metadatos.append(metadata)
             except Exception as e:
                 print(f"[X] Error en chunk {i}: {e}")
-
-        async with self:
-            self.mensaje_procesamiento = f"Documento '{file.filename}' procesado correctamente. Chunks: {len(metadatos)}"
-            yield
+        
+        self.mensaje_procesamiento = f"Documento '{file.filename}' procesado correctamente. Chunks: {len(metadatos)}"
+            
