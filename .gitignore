@@ -1,0 +1,39 @@
+# Entorno virtual
+/proyecto/
+.venv/
+env/
+venv/
+
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Archivos de configuración sensibles
+.env
+.env.*
+
+# Archivos de logs y caché
+*.log
+*.tmp
+*.bak
+*.swp
+.pytest_cache/
+.cache/
+dist/
+build/
+
+# Archivos de prueba
+tests/__pycache__/
+*.coverage
+
+# Archivos de MS Word (manuales y entregables)
+*.docx
+*.xlsx
+*.pptx
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+

@@ -134,14 +134,17 @@ class RAGState(rx.State):
             return "El índice de Pinecone no está inicializado. Verifica PINECONE_API_KEY, PINECONE_INDEX_NAME y que el índice exista."
         return ""
 
-    @rx.event(background=True)
+    @rx.event(background=True)        
     async def generar(self):
         async with self:
             self.is_loading = True
             self.respuesta = ""
             self.error_message = ""
-            if not self.pregunta.strip():
-                self.respuesta = "Por favor, escribe una pregunta."
+            texto = self.pregunta.strip()
+            if not texto:
+                mensaje= "Por favor,escribe una pregunta."
+                self.respuesta = mensaje
+                self.error_message = mensaje
                 self.is_loading = False
                 yield
                 return
