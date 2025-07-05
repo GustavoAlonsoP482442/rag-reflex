@@ -1,3 +1,7 @@
+*.db
+.states
+assets/external/
+.web
 # Entorno virtual
 /proyecto/
 .venv/

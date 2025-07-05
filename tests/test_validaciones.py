@@ -39,7 +39,7 @@ class MockRAGState:
             yield
             return
         
-        # Validación de emojis extendida
+        # Validación 2: Validacion de emojis extendida
         if re.search(r"[\U0001F600-\U0001F64F"  # Emoticons
                     r"\U0001F300-\U0001F5FF"  # Símbolos y pictogramas
                     r"\U0001F680-\U0001F6FF"  # Transporte y mapas
@@ -115,6 +115,7 @@ def test_pregunta_con_chino():
     estado.pregunta = "这是中文"  # chino
     for _ in estado.generar():
         pass
+    print("Mensaje recibido:", estado.error_message)
     assert "alfabeto latino" in estado.error_message.lower()      
 
 def test_pregunta_sin_letras():

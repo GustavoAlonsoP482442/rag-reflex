@@ -1,5 +1,10 @@
 import reflex as rx
 import os
+from dotenv import load_dotenv
+load_dotenv()
+print("🔍 OPENAI_API_KEY:", os.environ.get("OPENAI_API_KEY"))
+print("🔍 PINECONE_API_KEY:", os.environ.get("PINECONE_API_KEY"))
+print("🔍 PINECONE_INDEX_NAME:", os.environ.get("PINECONE_INDEX_NAME"))
 import time
 from pinecone import Pinecone
 from openai import OpenAI
@@ -8,6 +13,7 @@ import fitz
 import docx
 import uuid
 import json
+import re
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 
@@ -141,8 +147,48 @@ class RAGState(rx.State):
             self.respuesta = ""
             self.error_message = ""
             texto = self.pregunta.strip()
+            #Validación: campo vacío
             if not texto:
                 mensaje= "Por favor,escribe una pregunta."
+                self.respuesta = mensaje
+                self.error_message = mensaje
+                self.is_loading = False
+                yield
+                return
+            # Validación: emojis
+            emoji_pattern = re.compile("[\U0001F600-\U0001F64F"
+                           "\U0001F300-\U0001F5FF"
+                           "\U0001F680-\U0001F6FF"
+                           "\U0001F1E0-\U0001F1FF"
+                           "\U00002700-\U000027BF"
+                           "\U0001F900-\U0001F9FF"
+                           "\U00002600-\U000026FF]+", flags=re.UNICODE)
+            if emoji_pattern.search(texto):
+                mensaje = "No se permiten emojis en la pregunta."
+                self.respuesta = mensaje
+                self.error_message = mensaje
+                self.is_loading = False
+                yield
+                return
+            #Validación: solo caracteres latinos
+            if re.search(r"[^\u0000-\u007FáéíóúÁÉÍÓÚñÑüÜçÇ\s.,;:?!¿¡()\"'-]", texto):
+                mensaje = "Solo se permite ingresar texto en alfabeto latino."
+                self.respuesta = mensaje
+                self.error_message = mensaje
+                self.is_loading = False
+                yield
+                return
+            #Validación: debe contener al menos una letra
+            if not re.search(r"[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]", texto):
+                mensaje = "La pregunta debe contener letras."
+                self.respuesta = mensaje
+                self.error_message = mensaje
+                self.is_loading = False
+                yield
+                return
+            # Validación: al menos 3 palabras
+            if len(texto.split()) < 3:
+                mensaje = "La pregunta debe contener al menos 3 palabras."
                 self.respuesta = mensaje
                 self.error_message = mensaje
                 self.is_loading = False
