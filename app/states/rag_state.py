@@ -2,7 +2,7 @@ import reflex as rx
 import os
 from dotenv import load_dotenv
 load_dotenv()
-print("🔍 OPENAI_API_KEY:", os.environ.get("OPENAI_API_KEY"))
+print("🔍 OPENAI_API_KEY:", os.environ.get("OPENAI_API_KEY")) #para asegurarme de que realmente se estan cargando
 print("🔍 PINECONE_API_KEY:", os.environ.get("PINECONE_API_KEY"))
 print("🔍 PINECONE_INDEX_NAME:", os.environ.get("PINECONE_INDEX_NAME"))
 import time
@@ -232,25 +232,34 @@ class RAGState(rx.State):
 
         nombre = file.filename.lower()
 
+        texto = ""
+
         # Procesamiento de texto
-        if nombre.endswith(".pdf"):
-            import fitz
-            doc = fitz.open(str(path))
-            texto = "".join(p.get_text() for p in doc)
-        elif nombre.endswith(".txt"):
-            with open(path, "r", encoding="utf-8") as f:
-                texto = f.read()
-        elif nombre.endswith(".docx"):
-            import docx
-            doc = docx.Document(str(path))
-            texto = "\n".join(p.text for p in doc.paragraphs)
-        else:            
-            self.mensaje_procesamiento = "Tipo de archivo no soportado."                
+        try:
+            if nombre.endswith(".pdf"):                
+                doc = fitz.open(str(path))
+                texto = "".join(p.get_text() for p in doc)
+            elif nombre.endswith(".txt"):
+                with open(path, "r", encoding="utf-8") as f:
+                    texto = f.read()
+            elif nombre.endswith(".docx"):                
+                doc = docx.Document(str(path))
+                texto = "\n".join(p.text for p in doc.paragraphs)
+            else:            
+                self.mensaje_procesamiento = "Tipo de archivo no soportado."                
+                return
+        except Exception as e:   
+            self.mensaje_procesamiento = f"Error al procesar el archivo: {e}"
+            print("❌ Error procesando archivo:", e)
+            return 
+        
+        # Validación: texto vacío
+        if not texto.strip():
+            self.mensaje_procesamiento = "El archivo está vacío o no se pudo leer texto."
+            print("⚠️ Archivo sin texto útil.")
             return
 
-        from langchain.text_splitter import RecursiveCharacterTextSplitter
-        import uuid
-
+        
         splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
         chunks = splitter.split_text(texto)
         metadatos = []
@@ -268,6 +277,12 @@ class RAGState(rx.State):
                 metadatos.append(metadata)
             except Exception as e:
                 print(f"[X] Error en chunk {i}: {e}")
+
+
+        self.mensaje_procesamiento = (
+        f"Documento '{file.filename}' procesado correctamente. Chunks: {len(metadatos)}"
+        )
+        print("✅ Procesamiento exitoso.")
         
-        self.mensaje_procesamiento = f"Documento '{file.filename}' procesado correctamente. Chunks: {len(metadatos)}"
+        
             

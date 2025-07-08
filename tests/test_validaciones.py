@@ -220,7 +220,7 @@ def test_procesar_pdf_sin_texto():
     assert texto.strip() == ""
 
 
-def test_txt_utf8_caracteres_latinos():
+def test_txt_utf8_caracteredeactivates_latinos():
     contenido = "áéíóú ñ Ñ ç ü".encode("utf-8")
     texto = procesar_archivo_simulado("archivo.txt", contenido)
     assert "ñ" in texto
