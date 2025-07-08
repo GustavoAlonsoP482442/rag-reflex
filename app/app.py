@@ -21,6 +21,14 @@ def index() -> rx.Component:
                 on_click=lambda: RAGState.procesar_archivo(rx.upload_files("archivo_usuario")),
                 class_name="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
             ),
+            rx.cond(
+                RAGState.mensaje_procesamiento == "Procesando documento...",
+                rx.el.div(
+                    "⏳ Espere, su documento está siendo procesado...",
+                    class_name="text-blue-600 font-semibold text-center mb-4"
+                ),
+                rx.fragment()
+            ),
             rx.el.a(
                 "Ir al asistente",
                 href="/chat",
