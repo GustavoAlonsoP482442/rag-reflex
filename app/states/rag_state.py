@@ -222,15 +222,15 @@ class RAGState(rx.State):
             return
 
         file = files[0]
-        print(f"📁 Archivo recibido: {file.filename}")
+        print(f"📁 Archivo recibido: {file.name}")
 
         content = await file.read()
-        path = rx.get_upload_dir() / file.filename
+        path = rx.get_upload_dir() / file.name
         with open(path, "wb") as f:
             f.write(content)
         print(f"📂 Guardado como: {path}")
 
-        nombre = file.filename.lower()
+        nombre = file.name.lower()
 
         texto = ""
 
