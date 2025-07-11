@@ -280,7 +280,7 @@ class RAGState(rx.State):
 
 
         self.mensaje_procesamiento = (
-        f"Documento '{file.filename}' procesado correctamente. Chunks: {len(metadatos)}"
+        f"Documento '{file.name}' procesado correctamente. Chunks: {len(metadatos)}"
         )
         print("✅ Procesamiento exitoso.")
         
